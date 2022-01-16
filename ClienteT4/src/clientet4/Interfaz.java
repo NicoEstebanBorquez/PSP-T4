@@ -5,6 +5,7 @@
  */
 package clientet4;
 
+import java.util.ArrayList;
 import java.util.List;
 import tarea6.WebServiceT6;
 import tarea6.WebServiceT6_Service;
@@ -18,17 +19,30 @@ import tarea6.Zona;
  */
 public class Interfaz extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Interfaz
-     */
-    WebServiceT6_Service s = new WebServiceT6_Service();
-    WebServiceT6 conexion = s.getWebServiceT6Port();
+    WebServiceT6_Service s = null;
+    WebServiceT6 conexion = null;
 
     public Interfaz() {
         initComponents();
         this.setTitle("Tarea 4");
-        this.setSize(650, 700);
+        this.setSize(1100, 700);
+        this.setLocationRelativeTo(null);
 
+        s = new WebServiceT6_Service();
+        conexion = s.getWebServiceT6Port();
+
+        if (conexion != null) {
+            System.out.println(""
+                    + "********************************************************\n"
+                    + "*         PSP - Tarea Individual 4 - Web Services      *\n"
+                    + "********************************************************\n"
+                    + "*               Nicolás Esteban Bórquez                  *\n"
+                    + "********************************************************\n"
+                    + "*                    55124290Y                         *\n"
+                    + "******************************************************** ");
+        } else {
+            System.out.println("Error al iniciar el WebService.");
+        }
     }
 
     /**
@@ -53,6 +67,10 @@ public class Interfaz extends javax.swing.JFrame {
         txtZonaGeografica = new javax.swing.JTextField();
         btnListadosGeneral = new javax.swing.JButton();
         btnPaisesZona = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtNombrePais = new javax.swing.JTextField();
+        btnInfoPais = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -71,6 +89,11 @@ public class Interfaz extends javax.swing.JFrame {
 
         btnPaisesMoneda.setFont(new java.awt.Font("Gadugi", 0, 15)); // NOI18N
         btnPaisesMoneda.setText("Ejecutar");
+        btnPaisesMoneda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaisesMonedaActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnPaisesMoneda, new org.netbeans.lib.awtextra.AbsoluteConstraints(485, 320, -1, -1));
 
         txtArea.setColumns(20);
@@ -78,7 +101,7 @@ public class Interfaz extends javax.swing.JFrame {
         txtArea.setRows(5);
         jScrollPane1.setViewportView(txtArea);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 380, 490, 250));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, 340, 480));
 
         jLabel3.setFont(new java.awt.Font("Gadugi", 0, 15)); // NOI18N
         jLabel3.setText("Listado de países por zona geográfica:");
@@ -117,7 +140,32 @@ public class Interfaz extends javax.swing.JFrame {
 
         btnPaisesZona.setFont(new java.awt.Font("Gadugi", 0, 15)); // NOI18N
         btnPaisesZona.setText("Ejecutar");
+        btnPaisesZona.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaisesZonaActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnPaisesZona, new org.netbeans.lib.awtextra.AbsoluteConstraints(485, 240, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Gadugi", 0, 15)); // NOI18N
+        jLabel8.setText("Obtener información del país:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 380, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Gadugi", 0, 15)); // NOI18N
+        jLabel9.setText("Seleccione un país:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 410, -1, -1));
+
+        txtNombrePais.setFont(new java.awt.Font("Gadugi", 0, 15)); // NOI18N
+        getContentPane().add(txtNombrePais, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 100, -1));
+
+        btnInfoPais.setFont(new java.awt.Font("Gadugi", 0, 15)); // NOI18N
+        btnInfoPais.setText("Ejecutar");
+        btnInfoPais.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInfoPaisActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnInfoPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(485, 400, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -127,7 +175,7 @@ public class Interfaz extends javax.swing.JFrame {
         switch (comboListados.getSelectedIndex()) {
             case 0:
                 txtArea.setText("");
-                txtArea.append("[--------------- LISTADO DE ZONAS GEOGRÁFICAS ---------------]" + "\n\n");
+                txtArea.append("[----- LISTADO DE ZONAS GEOGRÁFICAS -----]" + "\n\n");
                 List<Zona> listaZonas = conexion.getZonas();
                 for (Zona z : listaZonas) {
                     txtArea.append("ID: " + String.valueOf(z.getId()) + "\n");
@@ -137,7 +185,7 @@ public class Interfaz extends javax.swing.JFrame {
 
             case 1:
                 txtArea.setText("");
-                txtArea.append("[--------------- LISTADO DE MONEDAS ---------------]" + "\n\n");
+                txtArea.append("[----- LISTADO DE MONEDAS -----]" + "\n\n");
                 List<Moneda> listaMonedas = conexion.getMonedas();
                 for (Moneda m : listaMonedas) {
                     txtArea.append("Código: " + m.getCodigo() + "\n");
@@ -147,7 +195,7 @@ public class Interfaz extends javax.swing.JFrame {
 
             case 2:
                 txtArea.setText("");
-                txtArea.append("[--------------- LISTADO DE PAISES ---------------]" + "\n\n");
+                txtArea.append("[----- LISTADO DE PAISES -----]" + "\n\n");
                 List<Pais> listaPaises = conexion.getPaises();
                 for (Pais p : listaPaises) {
                     txtArea.append("ID: " + p.getId() + "\n");
@@ -157,12 +205,143 @@ public class Interfaz extends javax.swing.JFrame {
                     txtArea.append("Cod. Bandera: " + p.getCodigoBandera() + "\n");
                     txtArea.append("Cod. NIC: " + p.getCodigoNic() + "\n\n");
                 }
-                break;    
+                break;
+        }
+    }//GEN-LAST:event_btnListadosGeneralActionPerformed
 
+    private void btnPaisesZonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaisesZonaActionPerformed
+
+        //Zona geográfica introducida por el usuario
+        String nombreZonaGeografica = this.txtZonaGeografica.getText();
+
+        //Obtención del ID de la zona geográfica introducida por el usuario:
+        //Lista con todos las zonas almacenados
+        List<Zona> listaZonas = conexion.getZonas();
+        long idZonaGeografica = 0;
+        for (Zona z : listaZonas) {
+            if (z.getNombre().equals(nombreZonaGeografica)) {
+                //Se obtiene el ID de la zona geofráfica introducida por el usuario
+                idZonaGeografica = z.getId();
+            }
         }
 
+        //Lista con todos los países almacenados
+        List<Pais> listaPaises = conexion.getPaises();
 
-    }//GEN-LAST:event_btnListadosGeneralActionPerformed
+        //ArrayList que almacena los paises de la zona geofráfica elegida
+        ArrayList<Pais> listaPaisesSeleccionados = new ArrayList<Pais>();
+        for (Pais p1 : listaPaises) {
+            if (p1.getIdArea() == idZonaGeografica) {
+                listaPaisesSeleccionados.add(p1);
+            }
+        }
+
+        //La lista de paises de la zona geográfica seleccionada se muestra en el TextArea
+        txtArea.setText("");
+        txtArea.append("[----- PAISES DE: " + nombreZonaGeografica.toUpperCase() + " -----]" + "\n\n");
+        for (Pais p : listaPaisesSeleccionados) {
+            txtArea.append("ID: " + p.getId() + "\n");
+            txtArea.append("Nombre: " + p.getNombre() + "\n");
+            txtArea.append("ID Area: " + p.getIdArea() + "\n");
+            txtArea.append("Nombre Area: " + nombreZonaGeografica + "\n");
+            txtArea.append("Cod. Divisa: " + p.getCodigoDivisa() + "\n");
+            txtArea.append("Cod. Bandera: " + p.getCodigoBandera() + "\n");
+            txtArea.append("Cod. NIC: " + p.getCodigoNic() + "\n\n");
+        }
+        this.txtZonaGeografica.setText("");
+    }//GEN-LAST:event_btnPaisesZonaActionPerformed
+
+    private void btnPaisesMonedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaisesMonedaActionPerformed
+
+        //Moneda introducida por el usuario
+        String nombreMoneda = this.txtMoneda.getText();
+
+        //Obtención del ID de la moneda introducida por el usuario:
+        //Lista con todos las monedas almacenados
+        List<Moneda> listaMonedas = conexion.getMonedas();
+        String idMoneda = "";
+        for (Moneda m : listaMonedas) {
+            if (m.getNombre().equals(nombreMoneda)) {
+                //Se obtiene el ID de la moneda introducida por el usuario
+                idMoneda = m.getCodigo();
+            }
+        }
+
+        //Lista con todos los países almacenados
+        List<Pais> listaPaises = conexion.getPaises();
+
+        //ArrayList que almacena los paises cuya moneda es la elegida por el usuario
+        ArrayList<Pais> listaPaisesSeleccionados = new ArrayList<Pais>();
+        for (Pais p1 : listaPaises) {
+            if (p1.getCodigoDivisa().equals(idMoneda)) {
+                listaPaisesSeleccionados.add(p1);
+            }
+        }
+
+        //La lista de paises seleccionados se muestra en el TextArea
+        txtArea.setText("");
+        txtArea.append("[----- PAISES CUYA MONEDA ES: " + nombreMoneda.toUpperCase() + " -----]" + "\n\n");
+        for (Pais p : listaPaisesSeleccionados) {
+            txtArea.append("ID: " + p.getId() + "\n");
+            txtArea.append("Nombre: " + p.getNombre() + "\n");
+            txtArea.append("ID Area: " + p.getIdArea() + "\n");
+            txtArea.append("Cod. Divisa: " + p.getCodigoDivisa() + "\n");
+            txtArea.append("Nombre Divisa: " + nombreMoneda + "\n");
+            txtArea.append("Cod. Bandera: " + p.getCodigoBandera() + "\n");
+            txtArea.append("Cod. NIC: " + p.getCodigoNic() + "\n\n");
+        }
+        this.txtMoneda.setText("");
+    }//GEN-LAST:event_btnPaisesMonedaActionPerformed
+
+    private void btnInfoPaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoPaisActionPerformed
+
+        //Nombre del pais introducido por el usuario
+        String nombrePais = this.txtNombrePais.getText();
+
+        //Lista con todos los países almacenados
+        List<Pais> listaPaises = conexion.getPaises();
+
+        //Objeto Pais que almacenará la información del país introducido por el usuario
+        Pais paisSeleccionado = null;
+        for (Pais pais : listaPaises) {
+            if (pais.getNombre().equals(nombrePais)) {
+                paisSeleccionado = pais;
+            }
+        }
+
+        //Obtención del nombre de la zona geográfica a partir de su ID:
+        //Lista con todos las zonas almacenados
+        List<Zona> listaZonas = conexion.getZonas();
+        String nombreZonaGeografica = "";
+        for (Zona z : listaZonas) {
+            if (z.getId() == paisSeleccionado.getIdArea()) {
+                //Nombre de la zona geográfica del país introducido por el usuario
+                nombreZonaGeografica = z.getNombre();
+            }
+        }
+
+        //Obtención del nombre de la moneda a partir de su ID:
+        //Lista con todos las monedas almacenados
+        List<Moneda> listaMonedas = conexion.getMonedas();
+        String nombreMoneda = "";
+        for (Moneda m : listaMonedas) {
+            if (m.getCodigo().equals(paisSeleccionado.getCodigoDivisa())) {
+                //Nombre de la moneda del país introducido por el usuario
+                nombreMoneda = m.getNombre();
+            }
+        }
+
+        //La información del país introducido se muestra en el TextArea
+        txtArea.setText("");
+        txtArea.append("[----- INFORMACIÓN DE: " + nombrePais.toUpperCase() + " -----]" + "\n\n");
+        txtArea.append("Nombre: " + paisSeleccionado.getNombre() + "\n");
+        txtArea.append("Zona geográfica: " + nombreZonaGeografica + "\n");
+        txtArea.append("Nombre Divisa: " + nombreMoneda + "\n");
+        txtArea.append("Cod. Bandera: " + paisSeleccionado.getCodigoBandera() + "\n");
+        txtArea.append("Cod. NIC: " + paisSeleccionado.getCodigoNic() + "\n\n");
+
+        this.txtNombrePais.setText("");
+    }//GEN-LAST:event_btnInfoPaisActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,9 +376,11 @@ public class Interfaz extends javax.swing.JFrame {
                 new Interfaz().setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInfoPais;
     private javax.swing.JButton btnListadosGeneral;
     private javax.swing.JButton btnPaisesMoneda;
     private javax.swing.JButton btnPaisesZona;
@@ -211,9 +392,12 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea txtArea;
     private javax.swing.JTextField txtMoneda;
+    private javax.swing.JTextField txtNombrePais;
     private javax.swing.JTextField txtZonaGeografica;
     // End of variables declaration//GEN-END:variables
 }
